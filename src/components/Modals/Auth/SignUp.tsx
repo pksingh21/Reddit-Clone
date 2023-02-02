@@ -43,15 +43,20 @@ const SignUp: React.FC = () => {
         });
   }, [UserError]);
   const onSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
     if (Error) setError("");
     if (signUpForm.password !== signUpForm.ConfirmPassword) {
-      setError("Passwords don't match");
+      setErrorState({
+        error: "Password MisMatch",
+        isError: true,
+        typeOfError: "signup",
+      });
       return;
     }
     createUserWithEmailAndPassword(signUpForm.email, signUpForm.password);
-    event.preventDefault();
   };
   const onChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    event.preventDefault();
     setSignUpForm((prev) => ({
       ...prev,
       [event.target.name]: event.target.value,

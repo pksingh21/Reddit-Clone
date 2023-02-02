@@ -7,7 +7,7 @@ export interface AuthModalState {
 export interface Error {
   isError: boolean;
   typeOfError: "signup" | "login" |  "OAuth" | null;
-  error: FIREBASE_ERROR_OBJECT_TYPE | undefined;
+  error: FIREBASE_ERROR_OBJECT_TYPE | string | undefined;
 }
 const defaultModalState: AuthModalState = {
   open: false,

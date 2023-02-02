@@ -29,11 +29,15 @@ const Login: React.FC<LoginProps> = () => {
           typeOfError: null,
         });
   }, [error]);
-  const onSubmit = (event: React.ChangeEvent<HTMLFormElement>) => {
+  const onSubmit = async (event: React.ChangeEvent<HTMLFormElement>) => {
     event.preventDefault();
-    signInWithEmailAndPassword(loginForm.email, loginForm.password);
+    const ans = await signInWithEmailAndPassword(
+      loginForm.email,
+      loginForm.password
+    );
   };
   const onChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    event.preventDefault();
     setLoginForm((prev) => ({
       ...prev,
       [event.target.name]: event.target.value,
@@ -41,66 +45,76 @@ const Login: React.FC<LoginProps> = () => {
   };
   return (
     <form onSubmit={onSubmit}>
-      <Input
-        name="email"
-        placeholder="Email"
-        type={`email`}
-        onChange={onChange}
-        required={true}
-        fontSize="10pt"
-        _placeholder={{ color: "grey.500" }}
-        _hover={{ bg: "white", border: "1px solid", borderColour: "blue.500" }}
-        _focus={{
-          outline: "none",
-          bg: "white",
-          border: "1px solid",
-          borderColour: "blue.500",
-        }}
-        bg="grey.50"
-      />
-      <Input
-        name="password"
-        placeholder="password"
-        type={`password`}
-        onChange={onChange}
-        required={true}
-        fontSize="10pt"
-        _placeholder={{ color: "grey.500" }}
-        _hover={{ bg: "white", border: "1px solid", borderColour: "blue.500" }}
-        _focus={{
-          outline: "none",
-          bg: "white",
-          border: "1px solid",
-          borderColour: "blue.500",
-        }}
-        bg="grey.50"
-      />
-      <Button
-        width={`100%`}
-        height={`36px`}
-        mt={2}
-        mb={2}
-        type="submit"
-        isLoading={loading}
-      >
-        Log In
-      </Button>
-      <Flex fontSize="9pt" justifyContent={`center`}>
-        <Text mr={1}>New Here?</Text>
-        <Text
-          color="blue.500"
-          fontWeight={`700`}
-          cursor={`pointer`}
-          onClick={() => {
-            setAuthModalState((prev) => ({
-              ...prev,
-              view: "signup",
-            }));
+      <>
+        <Input
+          name="email"
+          placeholder="Email"
+          type={`email`}
+          onChange={onChange}
+          required={true}
+          fontSize="10pt"
+          _placeholder={{ color: "grey.500" }}
+          _hover={{
+            bg: "white",
+            border: "1px solid",
+            borderColour: "blue.500",
           }}
+          _focus={{
+            outline: "none",
+            bg: "white",
+            border: "1px solid",
+            borderColour: "blue.500",
+          }}
+          bg="grey.50"
+        />
+        <Input
+          name="password"
+          placeholder="password"
+          type={`password`}
+          onChange={onChange}
+          required={true}
+          fontSize="10pt"
+          _placeholder={{ color: "grey.500" }}
+          _hover={{
+            bg: "white",
+            border: "1px solid",
+            borderColour: "blue.500",
+          }}
+          _focus={{
+            outline: "none",
+            bg: "white",
+            border: "1px solid",
+            borderColour: "blue.500",
+          }}
+          bg="grey.50"
+        />
+        <Button
+          width={`100%`}
+          height={`36px`}
+          mt={2}
+          mb={2}
+          type="submit"
+          isLoading={loading}
         >
-          SIGN UP
-        </Text>
-      </Flex>
+          Log In
+        </Button>
+        <Flex fontSize="9pt" justifyContent={`center`}>
+          <Text mr={1}>New Here?</Text>
+          <Text
+            color="blue.500"
+            fontWeight={`700`}
+            cursor={`pointer`}
+            onClick={() => {
+              setAuthModalState((prev) => ({
+                ...prev,
+                view: "signup",
+              }));
+            }}
+          >
+            SIGN UP
+          </Text>
+        </Flex>
+      </>
     </form>
   );
 };
