@@ -8,7 +8,10 @@ const Communities: React.FC<CommunitiesProps> = () => {
   const [openCommunityModal, setOpenCommunityModal] = useState(false);
   return (
     <>
-      <CreateCommunityModal open={openCommunityModal} />
+      <CreateCommunityModal
+        open={openCommunityModal}
+        setOpenCommunityModal={setOpenCommunityModal}
+      />
       <MenuItem
         width="100%"
         fontSize={`10pt`}
