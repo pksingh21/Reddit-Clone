@@ -1,6 +1,7 @@
+import { authModalState } from "@/src/atoms/authModalAtom";
+import { auth } from "@/src/firebase/clientApp";
 import { ChevronDownIcon } from "@chakra-ui/icons";
 import {
-  Button,
   Flex,
   Icon,
   Menu,
@@ -8,18 +9,16 @@ import {
   MenuDivider,
   MenuItem,
   MenuList,
-  Text,
+  Text
 } from "@chakra-ui/react";
 import { signOut, User } from "firebase/auth";
 import React from "react";
-import { FaRedditSquare } from "react-icons/fa";
-import { VscAccount } from "react-icons/vsc";
 import { CgProfile } from "react-icons/cg";
-import { MdOutlineLogin } from "react-icons/md";
-import { auth } from "@/src/firebase/clientApp";
-import { useRecoilState, useSetRecoilState } from "recoil";
-import { authModalState } from "@/src/atoms/authModalAtom";
+import { FaRedditSquare } from "react-icons/fa";
 import { IoSparkles } from "react-icons/io5";
+import { MdOutlineLogin } from "react-icons/md";
+import { VscAccount } from "react-icons/vsc";
+import { useSetRecoilState } from "recoil";
 type UserMenuProps = {
   user: User | null | undefined;
 };
