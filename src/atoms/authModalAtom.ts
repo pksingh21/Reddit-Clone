@@ -1,12 +1,13 @@
 import { atom } from "recoil";
 import { FIREBASE_ERROR_OBJECT_TYPE } from "../customTypes/customTypes";
+export type ModalView = "login" | "signup" | "resetPassword";
 export interface AuthModalState {
   open: boolean;
-  view: "login" | "signup" | "resetPassword";
+  view: ModalView;
 }
 export interface Error {
   isError: boolean;
-  typeOfError: "signup" | "login" |  "OAuth" | null;
+  typeOfError: "signup" | "login" | "OAuth" | null;
   error: FIREBASE_ERROR_OBJECT_TYPE | string | undefined;
 }
 const defaultModalState: AuthModalState = {
