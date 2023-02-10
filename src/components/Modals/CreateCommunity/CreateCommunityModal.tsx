@@ -28,7 +28,7 @@ const CreateCommunityModal: React.FC<CreateCommunityModalProps> = ({
   open,
   setOpenCommunityModal,
 }) => {
-  const [communityType, setCommunityType] = useState("Public");
+  const [communityType, setCommunityType] = useState("public");
   const [communityName, setCommunityName] = useState("");
   const [charsRemaning, setCharsRemaining] = useState(21);
   const handleChangeForInput = (event: React.ChangeEvent<HTMLInputElement>) => {
