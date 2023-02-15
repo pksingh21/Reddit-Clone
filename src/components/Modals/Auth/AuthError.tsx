@@ -19,22 +19,17 @@ const AuthError: React.FC<AuthErrorProps> = ({}) => {
   const [indexForError, setIndexError] = useState<FIREBASE_ERROR_OBJECT_KEY>(
     "Firebase: Error (auth/wrong-password)."
   );
-  const FirebaseErrorObjectTypeString = typeof ErrorState.error;
   React.useEffect(() => {
     if (
       typeof ErrorState.error !== "string" &&
       typeof ErrorState.error !== "undefined"
     ) {
-      
       const FinalError = ErrorState.error as FIREBASE_ERROR_OBJECT_TYPE;
       const index = FinalError.message as FIREBASE_ERROR_OBJECT_KEY;
       setIndexError(index);
     } else if (typeof ErrorState.error === "string") {
-      
       setIndexError("Firebase: Error (signup/password-mismatch).");
     } else if (typeof ErrorState.error === "undefined") {
-      
-      
     }
   }, [ErrorState]);
   return (
