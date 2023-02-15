@@ -1,20 +1,9 @@
 import { authModalState, errorState } from "@/src/atoms/authModalAtom";
-import {
-  Alert,
-  AlertDescription,
-  AlertIcon,
-  AlertTitle,
-  Button,
-  Flex,
-  Input,
-  Text,
-} from "@chakra-ui/react";
-import React, { useEffect, useState } from "react";
-import { useSetRecoilState } from "recoil";
-import { useCreateUserWithEmailAndPassword } from "react-firebase-hooks/auth";
 import { auth } from "@/src/firebase/clientApp";
-import { FIREBASE_ERRORS } from "@/src/firebase/error";
-import { FIREBASE_ERROR_OBJECT_KEY } from "@/src/customTypes/customTypes";
+import { Button, Flex, Input, Text } from "@chakra-ui/react";
+import React, { useEffect, useState } from "react";
+import { useCreateUserWithEmailAndPassword } from "react-firebase-hooks/auth";
+import { useSetRecoilState } from "recoil";
 type SignUp = {
   children: JSX.Element | JSX.Element[];
 };
@@ -46,8 +35,9 @@ const SignUp: React.FC = () => {
     event.preventDefault();
     if (Error) setError("");
     if (signUpForm.password !== signUpForm.ConfirmPassword) {
+      
       setErrorState({
-        error: "Password MisMatch",
+        error: "Pass Word MisMatch",
         isError: true,
         typeOfError: "signup",
       });

@@ -1,3 +1,7 @@
+import { errorState } from "@/src/atoms/authModalAtom";
+import { FIREBASE_ERROR_OBJECT_KEY } from "@/src/customTypes/customTypes";
+import { FIREBASE_ERROR_OBJECT_TYPE } from "@/src/customTypes/customTypes";
+import { FIREBASE_ERRORS } from "@/src/firebase/error";
 import {
   Alert,
   AlertDescription,
@@ -5,32 +9,41 @@ import {
   AlertTitle,
   Text,
 } from "@chakra-ui/react";
-import { FIREBASE_ERRORS } from "@/src/firebase/error";
-import {
-  FIREBASE_ERROR_OBJECT_KEY,
-  FIREBASE_ERROR_OBJECT_TYPE,
-} from "@/src/customTypes/customTypes";
-import React from "react";
-import { useRecoilState, useRecoilValue } from "recoil";
-import { errorState } from "@/src/atoms/authModalAtom";
+import React, { useState } from "react";
+import { useRecoilValue } from "recoil";
 
 type AuthErrorProps = {};
 
 const AuthError: React.FC<AuthErrorProps> = ({}) => {
   const ErrorState = useRecoilValue(errorState);
+  const [indexForError, setIndexError] = useState<FIREBASE_ERROR_OBJECT_KEY>(
+    "Firebase: Error (auth/wrong-password)."
+  );
+  const FirebaseErrorObjectTypeString = typeof ErrorState.error;
+  React.useEffect(() => {
+    if (
+      typeof ErrorState.error !== "string" &&
+      typeof ErrorState.error !== "undefined"
+    ) {
+      
+      const FinalError = ErrorState.error as FIREBASE_ERROR_OBJECT_TYPE;
+      const index = FinalError.message as FIREBASE_ERROR_OBJECT_KEY;
+      setIndexError(index);
+    } else if (typeof ErrorState.error === "string") {
+      
+      setIndexError("Firebase: Error (signup/password-mismatch).");
+    } else if (typeof ErrorState.error === "undefined") {
+      
+      
+    }
+  }, [ErrorState]);
   return (
     <>
       {ErrorState.isError && (
         <Alert status="error">
           <AlertIcon />
           <AlertTitle>
-            <Text fontSize={`14px`}>
-              {
-                FIREBASE_ERRORS[
-                  ErrorState.error?.message as FIREBASE_ERROR_OBJECT_KEY
-                ]
-              }
-            </Text>
+            <Text fontSize={`14px`}>{FIREBASE_ERRORS[indexForError]}</Text>
           </AlertTitle>
           <AlertDescription>
             <Text fontSize={`14px`}>{ErrorState.typeOfError} Error</Text>
