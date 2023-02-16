@@ -1,6 +1,8 @@
 import { authModalState, errorState } from "@/src/atoms/authModalAtom";
-import { auth } from "@/src/firebase/clientApp";
+import { auth, firestore } from "@/src/firebase/clientApp";
 import { Button, Flex, Input, Text } from "@chakra-ui/react";
+import { User } from "firebase/auth";
+import { addDoc, collection } from "firebase/firestore";
 import React, { useEffect, useState } from "react";
 import { useCreateUserWithEmailAndPassword } from "react-firebase-hooks/auth";
 import { useSetRecoilState } from "recoil";
@@ -35,7 +37,6 @@ const SignUp: React.FC = () => {
     event.preventDefault();
     if (Error) setError("");
     if (signUpForm.password !== signUpForm.ConfirmPassword) {
-      
       setErrorState({
         error: "Pass Word MisMatch",
         isError: true,
@@ -52,6 +53,16 @@ const SignUp: React.FC = () => {
       [event.target.name]: event.target.value,
     }));
   };
+  const createUserDocument = async (user: User) => {
+    //create a function to store users in cloud firestore
+    await addDoc(
+      collection(firestore, "users"),
+      JSON.parse(JSON.stringify(user))
+    );
+  };
+  useEffect(() => {
+    if (user !== undefined) createUserDocument(user!.user);
+  }, [user]);
   return (
     <form onSubmit={onSubmit}>
       <>

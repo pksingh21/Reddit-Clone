@@ -1,23 +1,22 @@
-import { firestore, auth } from "@/src/firebase/clientApp";
+import { auth, firestore } from "@/src/firebase/clientApp";
 import {
-  Stack,
   Box,
   Button,
   Checkbox,
-  Divider,
-  Input,
+  Divider, Flex,
+  Icon, Input,
   Modal,
   ModalBody,
   ModalCloseButton,
   ModalContent,
   ModalFooter,
   ModalHeader,
-  ModalOverlay,
-  Text,
-  Flex,
-  Icon,
+  ModalOverlay, Stack, Text
 } from "@chakra-ui/react";
-import { doc, getDoc, serverTimestamp, setDoc } from "firebase/firestore";
+import {
+  doc, runTransaction,
+  serverTimestamp
+} from "firebase/firestore";
 import React, { useState } from "react";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { BsFillEyeFill, BsFillPersonFill } from "react-icons/bs";
@@ -49,6 +48,7 @@ const CreateCommunityModal: React.FC<CreateCommunityModalProps> = ({
   };
   const handleCreateCommunity = async () => {
     //validate community name
+    if (error) setError("");
     const format = /[ `!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?~]/;
     if (format.test(communityName) || communityName.length < 3) {
       throw new Error(
@@ -59,27 +59,36 @@ const CreateCommunityModal: React.FC<CreateCommunityModalProps> = ({
     try {
       setLoading(true);
       const communityDocRef = doc(firestore, "communities", communityName);
-      const communityDoc = await getDoc(communityDocRef);
-      if (communityDoc.exists()) {
-        throw new Error(`Sorry , r/${communityName} already exists`);
-        setLoading(false);
-      }
-      //create community
-      await setDoc(communityDocRef, {
-        creatorId: user?.uid,
-        createdAt: serverTimestamp(),
-        numberOfMembers: 1,
-        privacyType: communityType,
+      await runTransaction(firestore, async (transaction) => {
+        const communityDoc = await transaction.get(communityDocRef);
+        if (communityDoc.exists()) {
+          throw new Error(`Sorry , r/${communityName} already exists`);
+        }
+        //create community
+        transaction.set(communityDocRef, {
+          creatorId: user?.uid,
+          createdAt: serverTimestamp(),
+          numberOfMembers: 1,
+          privacyType: communityType,
+        });
+        const communityMemberDocRef = doc(
+          firestore!,
+          `users/${user?.uid}/communitiySnippets`,
+          communityName
+        );
+        transaction.set(communityMemberDocRef, {
+          communityId: communityName,
+          isModerator: true,
+        });
       });
-      setLoading(false);
     } catch (error) {
       if (error instanceof Error) {
-        
         setError(error.message);
       } else {
-        
+        console.log("something went wrong XD");
       }
     }
+    setLoading(false);
   };
   return (
     <>
